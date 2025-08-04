@@ -1,4 +1,4 @@
-LLM - Phase 1 - Errors & Solutions
+LLM - Phase 1 - Chat App - Errors & Solutions
 
 
 1. Error while installing Python:

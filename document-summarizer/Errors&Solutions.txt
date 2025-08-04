@@ -1,0 +1,11 @@
+LLM - Phase 1 - Doc Summarizer - Errors & Solutions
+
+
+1. Error while starting application:
+ModuleNotFoundError: No module named 'BE'
+Traceback:
+File "/home/seq_mahesh/Projects/LLM/ProjectWorkspace/llm-lab/document-summarizer/FE/app.py", line 3, in <module>
+    from BE.utils.pdf_utils import extract_text_from_pdf
+
+Solution: Updated the app.py to correct the import for pdf_utils
+from BE.utils.pdf_utils import extract_text_from_pdf

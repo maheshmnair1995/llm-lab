@@ -1,0 +1,6 @@
+LLM - Phase 1 - Doc Summarizer - Steps
+
+
+1. cd llm-lab/document-summarizer
+2. pip install -r requirements.txt
+3. streamlit run FE/app.py

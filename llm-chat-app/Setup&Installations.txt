@@ -1,4 +1,4 @@
-LLM - Phase 1 - Steps
+LLM - Phase 1 - Chat App - Steps
 
 
 1. Install Python
