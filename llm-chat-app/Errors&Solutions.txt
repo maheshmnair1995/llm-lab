@@ -1,0 +1,276 @@
+LLM - Phase 1 - Errors & Solutions
+
+
+1. Error while installing Python:
+Waiting for cache lock: Could not get lock /var/lib/dpkg/lock-frontend. It is held by process 8155 (unattended-upgr)
+
+Solution:
+sudo kill 8155
+sudo rm /var/lib/dpkg/lock-frontend
+sudo rm /var/lib/dpkg/lock
+sudo dpkg --configure -a
+
+
+2. Error while installing Ollama:
+HTTP/2 stream 0 was not closed cleanly: PROTOCOL_ERROR (err 1)
+gzip: stdin: unexpected end of file
+tar: Unexpected EOF in archive
+tar: Unexpected EOF in archive
+tar: Error is not recoverable: exiting now
+
+This error means the Ollama installer download was interrupted or corrupted.
+
+Solution:
+Delete any partially downloaded Ollama files:
+sudo rm -rf /usr/local/lib/ollama
+curl -fsSL https://ollama.com/install.sh | sh
+
+
+3. Error while starting Ollama:
+Couldn't find '/home/seq_mahesh/.ollama/id_ed25519'. Generating new private key.
+Your new public key is: 
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINVidOd3G4mg6DrshnR7QMYDywdrprVbhRzmJ+mxeuSG
+Error: listen tcp 127.0.0.1:11434: bind: address already in use
+The error listen tcp 127.0.0.1:11434: bind: address already in use means Ollama is already running or another process is using port 11434.
+
+Solution:
+Check which process is using the port:
+sudo lsof -i :11434
+If Ollama is already running, you don't need to start it again.
+If another process is using the port, stop it:
+sudo kill <PID>
+Replace <PID> with the process ID from the previous command.
+Ollama is likely running as a background service or systemd process, which restarts automatically when killed.
+To stop it from restarting:
+Check if Ollama is running as a service:
+systemctl status ollama
+Stop and disable the service:
+sudo systemctl stop ollama
+sudo systemctl disable ollama
+Verify the port is free:
+sudo lsof -i :11434
+
+
+4. Error while starting backend app:
+uvicorn backend:app --reload
+Command 'uvicorn' not found, but can be installed with:
+
+Solution:
+sudo apt install uvicorn
+
+
+5. Error while starting frontend app:
+streamlit run app.py
+streamlit: command not found
+The error means Streamlit is not installed or not in your PATH.
+
+Solution:
+Install Streamlit using pip:
+pip install streamlit
+Run your app:
+streamlit run app.py
+
+
+6. Error for Streamlit:
+Streamlit is installed for your user, but the ~/.local/bin directory is likely not in your PATH.
+
+Solution:
+Add ~/.local/bin to your PATH for the current session:
+export PATH=$PATH:~/.local/bin
+
+
+7. Error while sending request from FE:
+requests.exceptions.JSONDecodeError: Expecting value: line 1 column 1 (char 0)
+Traceback:
+File "/home/seq_mahesh/Projects/LLM/Phase1/app.py", line 14, in <module>
+    answer = response.json().get("response", "")
+File "/home/seq_mahesh/.local/lib/python3.10/site-packages/requests/models.py", line 980, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+
+Solution: Update app.py
+
+import streamlit as st
+import requests
+
+st.title("Local LLM Chat App")
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+user_input = st.text_input("You:", "")
+
+if st.button("Send") and user_input:
+    st.session_state.messages.append(("You", user_input))
+    try:
+        response = requests.post("http://localhost:8000/chat", json={"prompt": user_input})
+        if response.status_code == 200 and response.headers.get("Content-Type", "").startswith("application/json"):
+            answer = response.json().get("response", "")
+        else:
+            st.error(f"Error: {response.status_code} - {response.text}")
+            answer = ""
+    except Exception as e:
+        st.error(f"Request failed: {e}")
+        answer = ""
+    st.session_state.messages.append(("LLM", answer))
+
+for sender, msg in st.session_state.messages:
+    st.write(f"**{sender}:** {msg}")
+
+
+8. Error while sending request from FE:
+Error: 500 - Internal Server Error
+
+You: Hi
+LLM:
+
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/requests/models.py", line 965, in json
+    return complexjson.loads(self.content.decode(encoding), **kwargs)
+  File "/usr/lib/python3.10/json/__init__.py", line 346, in loads
+    return _default_decoder.decode(s)
+  File "/usr/lib/python3.10/json/decoder.py", line 340, in decode
+    raise JSONDecodeError("Extra data", s, end)
+json.decoder.JSONDecodeError: Extra data: line 2 column 1 (char 96)
+
+During handling of the above exception, another exception occurred:
+Traceback (most recent call last):
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/fastapi/applications.py", line 1054, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/applications.py", line 113, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/routing.py", line 78, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/starlette/routing.py", line 75, in app
+    response = await f(request)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/fastapi/routing.py", line 302, in app
+    raw_response = await run_endpoint_function(
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/fastapi/routing.py", line 213, in run_endpoint_function
+    return await dependant.call(**values)
+  File "/home/seq_mahesh/Projects/LLM/Phase1/backend.py", line 13, in chat
+    return response.json()
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/requests/models.py", line 973, in json
+    raise RequestsJSONDecodeError(e.msg, e.doc, e.pos)
+requests.exceptions.JSONDecodeError: Extra data: line 2 column 1 (char 96)
+
+Solution: Update backend.py for error handling
+import requests
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+
+app = FastAPI()
+
+@app.post("/chat")
+async def chat(request: Request):
+    data = await request.json()
+    prompt = data.get("prompt", "")
+    # Replace with your actual external API URL
+    external_url = "YOUR_EXTERNAL_API_URL"
+    try:
+        response = requests.post(external_url, json={"prompt": prompt})
+        print("Raw response:", response.text)  # Debug: log raw response
+        if response.status_code == 200 and response.headers.get("Content-Type", "").startswith("application/json"):
+            try:
+                return response.json()
+            except Exception as e:
+                return JSONResponse(
+                    status_code=500,
+                    content={"error": f"JSON decode failed: {e}", "raw_response": response.text}
+                )
+        else:
+            return JSONResponse(
+                status_code=response.status_code,
+                content={"error": "Upstream error", "details": response.text}
+            )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Request failed: {e}"}
+        )
+
+
+9. Error while sending request from FE:
+Error: 500 - {"error":"Request failed: Invalid URL 'YOUR_EXTERNAL_API_URL': No scheme supplied. Perhaps you meant https://YOUR_EXTERNAL_API_URL?"}
+
+Solution:
+external_url = "http://localhost:11434/api/chat"
+
+
+10. Error while sending request from FE:
+Error: 400 - {"error":"Upstream error","details":"{"error":"model is required"}"}
+
+Solution: Update backend.py
+import requests
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+
+app = FastAPI()
+
+@app.post("/chat")
+async def chat(request: Request):
+    data = await request.json()
+    prompt = data.get("prompt", "")
+    external_url = "http://localhost:11434/api/chat"
+    payload = {
+        "model": "llama2",
+        "prompt": prompt
+    }
+    try:
+        response = requests.post(external_url, json=payload)
+        print("Raw response:", response.text)
+        if response.status_code == 200 and response.headers.get("Content-Type", "").startswith("application/json"):
+            try:
+                return response.json()
+            except Exception as e:
+                return JSONResponse(
+                    status_code=500,
+                    content={"error": f"JSON decode failed: {e}", "raw_response": response.text}
+                )
+        else:
+            return JSONResponse(
+                status_code=response.status_code,
+                content={"error": "Upstream error", "details": response.text}
+            )
+    except Exception as e:
+        return JSONResponse(
+            status_code=500,
+            content={"error": f"Request failed: {e}"}
+        )
+
+
+11. No response from FE for the queries
+You: Hi
+LLM:
+
+Solution:
+Upodated the backend.py & app.py for correcting the response parsing logic
+
+
+12. Error: 500 - {"error":"Request failed: Extra data: line 2 column 1 (char 127)"}
+
+Solution:
+Updated the backend.py to disable streaming
