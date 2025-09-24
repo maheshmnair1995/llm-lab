@@ -1,0 +1,30 @@
+LLM - Phase 2 - Global News Topic Tracker - Steps
+
+
+Goal:
+Scrape Google News and summarize trending topics using LLMs.
+
+
+1. Setup
+cd global-news-tracker
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+
+
+2. Run the backend fetcher
+python BE/app.py
+
+
+3. Install FE dependencies
+cd FE
+npm install
+
+
+4. Start the FE
+npm run dev
+
+
+5. Open browser
+http://127.0.0.1:5000
