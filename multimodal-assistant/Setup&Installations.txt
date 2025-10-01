@@ -1,0 +1,30 @@
+LLM - Phase 2 - Multi-Modal Assistant - Steps
+
+
+Goal:
+Build an assistant capable of answering queries based on both text and images.
+
+
+1. Setup
+cd multimodal-assistant
+sudo apt install tesseract-ocr
+pip install accelerate
+pip install -r requirements.txt
+
+
+2. Start backend
+cd BE
+uvicorn app:app --reload --port 8000
+
+
+3. Install FE dependencies
+cd FE
+npm install
+
+
+4. Start the FE
+npm run dev
+
+
+5. Open browser
+http://localhost:5173/

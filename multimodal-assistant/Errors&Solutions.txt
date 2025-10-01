@@ -1,0 +1,156 @@
+LLM - Phase 2 - Multi-Modal Assistant - Errors & Solutions
+
+
+1. Error while acessing UI
+This localhost page can’t be found
+No web page was found for the web address: http://localhost:5173/
+HTTP ERROR 404
+
+Solution:
+Added index.html
+
+
+2. Error while starting BE
+uvicorn app:app --reload --port 8000
+INFO:     Will watch for changes in these directories: ['/home/seq_mahesh/Projects/LLM/ProjectWorkspace/llm-lab/multimodal-assistant/BE']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [170150] using WatchFiles
+Loading model google/flan-t5-large... This may take a minute...
+Device set to use cpu
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 22, in import_from_string
+    raise exc from None
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/seq_mahesh/Projects/LLM/ProjectWorkspace/llm-lab/multimodal-assistant/BE/app.py", line 6, in <module>
+    import pdfplumber
+ModuleNotFoundError: No module named 'pdfplumber'
+
+Solution:
+pip install pdfplumber pytesseract pillow
+
+
+3. Error while starting BE
+uvicorn app:app --reload --port 8000
+INFO:     Will watch for changes in these directories: ['/home/seq_mahesh/Projects/LLM/ProjectWorkspace/llm-lab/multimodal-assistant/BE']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [14231] using WatchFiles
+Device set to use cpu
+Using a slow image processor as `use_fast` is unset and a slow processor was saved with this model. `use_fast=True` will be the default behavior in v4.52, even if the model was saved with a slow processor. This will result in minor differences in outputs. You'll still be able to use a slow processor with `use_fast=False`.
+Process SpawnProcess-1:
+Traceback (most recent call last):
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 409, in hf_raise_for_status
+    response.raise_for_status()
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/requests/models.py", line 1026, in raise_for_status
+    raise HTTPError(http_error_msg, response=self)
+requests.exceptions.HTTPError: 401 Client Error: Unauthorized for url: https://huggingface.co/Salesforce/blip-image-captioning-small/resolve/main/preprocessor_config.json
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/transformers/utils/hub.py", line 476, in cached_files
+    hf_hub_download(
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1010, in hf_hub_download
+    return _hf_hub_download_to_cache_dir(
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1117, in _hf_hub_download_to_cache_dir
+    _raise_on_head_call_error(head_call_error, force_download, local_files_only)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1658, in _raise_on_head_call_error
+    raise head_call_error
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1546, in _get_metadata_or_catch_error
+    metadata = get_hf_file_metadata(
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/utils/_validators.py", line 114, in _inner_fn
+    return fn(*args, **kwargs)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 1463, in get_hf_file_metadata
+    r = _request_wrapper(
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 286, in _request_wrapper
+    response = _request_wrapper(
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/file_download.py", line 310, in _request_wrapper
+    hf_raise_for_status(response)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/huggingface_hub/utils/_http.py", line 459, in hf_raise_for_status
+    raise _format(RepositoryNotFoundError, message, response) from e
+huggingface_hub.errors.RepositoryNotFoundError: 401 Client Error. (Request ID: Root=1-68da31ea-65ff467008c2fe3a01e04fb4;0003a5db-1289-4809-8784-6d4657d163d4)
+
+Repository Not Found for url: https://huggingface.co/Salesforce/blip-image-captioning-small/resolve/main/preprocessor_config.json.
+Please make sure you specified the correct `repo_id` and `repo_type`.
+If you are trying to access a private or gated repo, make sure you are authenticated. For more details, see https://huggingface.co/docs/huggingface_hub/authentication
+Invalid username or password.
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 314, in _bootstrap
+    self.run()
+  File "/usr/lib/python3.10/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio.run(self.serve(sockets=sockets))
+  File "/usr/lib/python3.10/asyncio/runners.py", line 44, in run
+    return loop.run_until_complete(main)
+  File "uvloop/loop.pyx", line 1518, in uvloop.loop.Loop.run_until_complete
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/config.py", line 436, in load
+    self.loaded_app = import_from_string(self.app)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.10/importlib/__init__.py", line 126, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+  File "<frozen importlib._bootstrap>", line 1050, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1027, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1006, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 688, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 883, in exec_module
+  File "<frozen importlib._bootstrap>", line 241, in _call_with_frames_removed
+  File "/home/seq_mahesh/Projects/LLM/ProjectWorkspace/llm-lab/multimodal-assistant/BE/app.py", line 4, in <module>
+    from llm import answer_text_question, answer_image_question
+  File "/home/seq_mahesh/Projects/LLM/ProjectWorkspace/llm-lab/multimodal-assistant/BE/llm.py", line 34, in <module>
+    processor = BlipProcessor.from_pretrained("Salesforce/blip-image-captioning-small")
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/transformers/processing_utils.py", line 1310, in from_pretrained
+    args = cls._get_arguments_from_pretrained(pretrained_model_name_or_path, **kwargs)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/transformers/processing_utils.py", line 1369, in _get_arguments_from_pretrained
+    args.append(attribute_class.from_pretrained(pretrained_model_name_or_path, **kwargs))
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/transformers/image_processing_base.py", line 206, in from_pretrained
+    image_processor_dict, kwargs = cls.get_image_processor_dict(pretrained_model_name_or_path, **kwargs)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/transformers/image_processing_base.py", line 338, in get_image_processor_dict
+    resolved_image_processor_file = cached_file(
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/transformers/utils/hub.py", line 318, in cached_file
+    file = cached_files(path_or_repo_id=path_or_repo_id, filenames=[filename], **kwargs)
+  File "/home/seq_mahesh/.local/lib/python3.10/site-packages/transformers/utils/hub.py", line 508, in cached_files
+    raise OSError(
+OSError: Salesforce/blip-image-captioning-small is not a local folder and is not a valid model identifier listed on 'https://huggingface.co/models'
+If this is a private repository, make sure to pass a token having permission to this repo either by logging in with `hf auth login` or by passing `token=<your_token>`
+
+Solution:
+Updated llm.py

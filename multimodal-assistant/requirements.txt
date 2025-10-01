@@ -1,0 +1,7 @@
+transformers
+torch
+Pillow
+PyPDF2
+python-docx
+faiss-cpu
+sentence-transformers
