@@ -1,0 +1,11 @@
+# Core backend
+fastapi==0.115.0
+uvicorn[standard]==0.30.1
+faster-whisper==0.10.0
+llama-cpp-python==0.2.75
+python-multipart==0.0.9
+requests==2.32.3
+
+
+# Frontend
+streamlit==1.39.0

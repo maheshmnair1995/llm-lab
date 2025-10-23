@@ -1,0 +1,47 @@
+LLM - Phase 2 - Meeting Notes and Action Item Extractor - Errors & Solutions
+
+
+1. Error while installing dependencies
+  Installing build dependencies ... done
+  Getting requirements to build wheel ... error
+  error: subprocess-exited-with-error
+  
+  × Getting requirements to build wheel did not run successfully.
+  │ exit code: 1
+  ╰─> [1 lines of output]
+      pkg-config is required for building PyAV
+      [end of output]
+  
+  note: This error originates from a subprocess, and is likely not a problem with pip.
+error: subprocess-exited-with-error
+
+× Getting requirements to build wheel did not run successfully.
+│ exit code: 1
+╰─> See above for output.
+
+note: This error originates from a subprocess, and is likely not a problem with pip.
+
+Solution:
+sudo apt update
+sudo apt install -y pkg-config ffmpeg libavdevice-dev libavfilter-dev libavformat-dev libavcodec-dev libswscale-dev libavutil-dev
+pip install -r requirements.txt
+
+
+2. Error while starting BE
+python3 app.py 
+File "/home/seq_mahesh/Projects/LLM/ProjectWorkspace/llm-lab/meeting-notes-extractor/BE/app.py", 
+line 23 contents = await file.read()
+ ^ IndentationError: expected an indented block after function definition on line 22
+
+Solution:
+Update app.py to resolve IndentationError
+
+
+3. Error while starting FE
+Script execution error File "/home/seq_mahesh/Projects/LLM/ProjectWorkspace/llm-lab/meeting-notes-extractor/FE/streamlit_app.py", 
+line 16 st.audio(uploaded_file) 
+^ IndentationError: expected an indented block after 'if' statement on line 15
+
+Solution:
+Update streamlit_app.py to resolve IndentationError
+

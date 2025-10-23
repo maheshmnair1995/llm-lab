@@ -1,0 +1,19 @@
+LLM - Phase 2 - Meeting Notes and Action Item Extractor - Steps
+
+
+Goal:
+Create an app to convert meeting audio into structured notes and task lists using Whisper and OpenAI APIs.
+
+
+1. Setup
+pip install -r requirements.txt
+
+
+2. Start BE
+cd BE/
+python3 app.py
+
+
+3. Start the FE
+cd FE/
+streamlit run streamlit_app.py
