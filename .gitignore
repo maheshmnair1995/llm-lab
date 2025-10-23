@@ -1,3 +1,10 @@
 __pycache__/
 */*.db
 */venv/
+*/chroma_db/
+*/BE/data/
+*/BE/uploads/
+*/FE/index.html
+*/FE/node_modules/
+*/FE/package-lock.json
+*/FE/vite.config.js
